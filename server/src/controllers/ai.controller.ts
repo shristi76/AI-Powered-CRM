@@ -7,7 +7,7 @@ import { CSVParserService } from "../services/csv/csv-parser.service";
 import { ResponseValidatorService } from "../services/ai/response-validator.service";
 import { RowMappingService } from "../services/ai/row-mapping.service";
 import { ImportSummaryService } from "../services/ai/import-summary.service";
-
+import { CSVValidatorService } from "../services/csv/csv-validator.service";
 
 
 export const analyzeCSV = async (
@@ -23,6 +23,7 @@ export const analyzeCSV = async (
     }
 
     const parsedCSV = CSVParserService.parse(req.file.buffer);
+    CSVValidatorService.validate(parsedCSV.rows);
 
     const analysis =
       HeaderAnalysisService.analyze(parsedCSV);
@@ -65,18 +66,19 @@ return res.json({
   mappedRows,
 });
 
-  } catch (error) {
+  }catch (error) {
+  console.error(error);
 
-    // return res.status(500).json({
-    //   success: false,
-    //   message:
-    //     error instanceof Error
-    //       ? error.message
-    //       : "Unknown Error",
-    // });
-return res.status(429).json({
-  success: false,
-  message: "API limit exceeded. Please try again later.",
-});
+  if (error instanceof Error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
   }
+
+  return res.status(500).json({
+    success: false,
+    message: "Internal Server Error",
+  });
+}
 };
