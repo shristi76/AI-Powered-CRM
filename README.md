@@ -152,6 +152,9 @@ The backend then converts every uploaded record into a standardized CRM format.
 
 ---
 
+<img width="1292" height="860" alt="Screenshot 2026-07-10 171928" src="https://github.com/user-attachments/assets/d885cebe-e18d-4c40-a8dc-6309ba5d6d44" />
+
+---
 
 #  Edge Cases Handled
 
